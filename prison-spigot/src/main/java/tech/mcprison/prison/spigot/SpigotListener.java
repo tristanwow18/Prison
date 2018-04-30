@@ -96,8 +96,17 @@ public class SpigotListener implements Listener {
 
     @EventHandler public void onPlayerInteract(PlayerInteractEvent e) {
         // TODO Accept air events (block is null when air is clicked...)
-        if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_AIR) {
-            return;
+//        if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_AIR) {
+//            return;
+//        }
+
+        // Since the Prison-core and the Spigot Action enums have different members,
+        // we want to make sure we only get the ones that our Prison enum has.
+        try {
+            tech.mcprison.prison.internal.events.player.PlayerInteractEvent.Action.valueOf(e.getAction().name());
+            // throws an IllegalArgumentException if the value isn't found in valueOf.
+        } catch(IllegalArgumentException ignored) {
+            return; // not in Prison so we don't care about it
         }
 
         // This one's a workaround for the double-interact event glitch.
